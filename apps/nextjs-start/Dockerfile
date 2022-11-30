@@ -1,11 +1,12 @@
 FROM node:16-buster as builder
 
 WORKDIR /opt/deploy
+RUN ls -R
 
 COPY /common/deploy .
 COPY /apps/nextjs-start/.next apps/nextjs-start/.next
 
-RUN ls -LR
+RUN ls
 
 WORKDIR /opt/deploy/apps/nextjs-start
 
