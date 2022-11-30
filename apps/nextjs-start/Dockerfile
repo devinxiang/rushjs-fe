@@ -2,12 +2,12 @@ FROM node:16-buster as builder
 
 WORKDIR /opt/deploy
 
-# 怎么指定copy
-COPY . .
-# COPY --from=builder /opt/monorepo/common/deploy .
-# COPY --from=builder /opt/monorepo/apps/meganode-ui/.next apps/meganode-ui/.next
+COPY /common/deploy .
+COPY /apps/nextjs-start/.next apps/nextjs-start/.next
 
-WORKDIR /opt/deploy/apps/meganode-ui
+RUN ls -LR
+
+WORKDIR /opt/deploy/apps/nextjs-start
 
 EXPOSE 3000
 
