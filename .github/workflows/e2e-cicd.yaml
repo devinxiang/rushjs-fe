@@ -58,33 +58,35 @@ jobs:
         with:
           node-version: 16
 
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
+      - name: Cache Rush
+        uses: actions/cache@v2
         with:
-          version: 7
-          run_install: false
+          path: |
+            common/temp/install-run
+            ~/.rush
+          key: ${{ runner.os }}-${{ hashFiles('rush.json') }}
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
+      - name: Cache pnpm
+        uses: actions/cache@v2
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          path: |
+            common/temp/pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+      - name: rushjs Install 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
           node common/scripts/install-run-rush.js install -t ${APP_NAME}
+
+      - name: rushjs Build 🔧
+        run: |
           node common/scripts/install-run-rush.js build -t ${APP_NAME}
-          node common/scripts/install-run-rush.js deploy -p ${APP_NAME}
-          ls
+
+      - name: rushjs deploy 🔧
+        run: |
+            node common/scripts/install-run-rush.js deploy -p ${APP_NAME}
+
+      - name: docker build 🔧
+        run: |
           time docker build -f apps/${APP_NAME}/Dockerfile . -t nextjs-start-image
 
       - name: Add release label
