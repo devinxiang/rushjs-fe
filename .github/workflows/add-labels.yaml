@@ -24,20 +24,18 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-
-      - name: get comment json
-        id: get_comment_json
+      - name: get comment label
+        id: get_comment_label
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
           python .github/utils/parse_comment.py
-
       - name: Add release label
         uses: actions/github-script@v6
         with:
           script: |
             echo "$COMMENT_LABELS"
-
+            echo "$COMMENT_JSON"
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -45,4 +43,5 @@ jobs:
               labels: ["deploy-nextjs-start"]
             })
         env:
-           COMMENT_JSON: ${{ steps.get_comment_json.outputs.COMMENT_LABELS }}
+           COMMENT_LABELS: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
+           COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}
