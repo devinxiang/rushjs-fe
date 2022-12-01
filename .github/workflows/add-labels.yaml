@@ -36,7 +36,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            echo "$COMMENT_JSON"
+            echo "$COMMENT_LABELS"
 
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
@@ -45,4 +45,4 @@ jobs:
               labels: ["deploy-nextjs-start"]
             })
         env:
-           COMMENT_JSON: ${{ fromJSON(steps.get_comment_json.outputs.COMMENT_JSON) }}
+           COMMENT_JSON: ${{ fromJSON(steps.get_comment_json.outputs.COMMENT_LABELS) }}
