@@ -17,6 +17,9 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
+      - name: Checkout repository content
+        uses: actions/checkout@v2.3.4
+
       - name: install Python
         uses: actions/setup-python@v4
         with:
@@ -27,7 +30,7 @@ jobs:
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
-          python .github/aps-tools/parse_comment.py
+          python .github/utils/parse_comment.py
 
       - name: Add release label
         uses: actions/github-script@v6
