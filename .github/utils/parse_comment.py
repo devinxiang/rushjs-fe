@@ -11,7 +11,7 @@ res_json = {
 	'name': temp[0],
 	'labels': temp[1]
 }
-res_json_str = json.dumps
+res_json_str = json.dumps(res_json)
 
 print(f"::set-output name=COMMENT_LABELS::{res_str}")
 print(f"::set-output name=COMMENT_JSON::{res_json_str}")
