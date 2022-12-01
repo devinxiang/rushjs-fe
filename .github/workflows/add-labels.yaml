@@ -25,7 +25,7 @@ jobs:
         if: startsWith(${{ github.event.comment.body }}, 'add-labels:')
         with:
           text: ${{ github.event.comment.body }}
-          regex: '([^:,]+)'
+          regex: '/([^:,]+)/'
 
       - uses: actions-ecosystem/action-add-labels@v1
         if: ${{ steps.regex-match.outputs.match != '' }}
