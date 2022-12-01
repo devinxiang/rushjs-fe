@@ -2,6 +2,6 @@
 *
 
 # Allow files and directories
-!/apps/nextjs-start/.next
-!/apps/nextjs-start/public
-!/common/deploy
+!apps/nextjs-start/.next
+!apps/nextjs-start/public
+!common/deploy
