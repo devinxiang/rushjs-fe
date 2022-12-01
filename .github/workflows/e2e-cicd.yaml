@@ -9,6 +9,15 @@ env:
   APP_NAME: nextjs-start
 
 jobs:
+  get-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo comment body
+        run: |
+          echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
   trigger-comment:
     if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest

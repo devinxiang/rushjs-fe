@@ -1,0 +1,17 @@
+name: Add labels
+
+on:
+  issue_comment:
+    types: [created, edited]
+env:
+  APP_NAME: nextjs-start
+
+jobs:
+  get-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo comment body
+        run: |
+          echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
