@@ -9,34 +9,8 @@ env:
   APP_NAME: nextjs-start
 
 jobs:
-  get-comment:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo comment body
-        run: |
-          echo "$GITHUB_CONTEXT"
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-
-  trigger-comment:
-    if: ${{ github.event.issue.pull_request }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Execute a comment command
-        id: check
-        uses: khan/pull-request-comment-trigger@v1.1.0
-        with:
-          trigger: '/e2e-deploy'
-          reaction: rocket
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-
-    outputs:
-      triggered: ${{ steps.check.outputs.triggered }}
-
   build-and-deploy:
-    needs: [trigger-comment]
-    if: needs.trigger-comment.outputs.triggered == 'true'
+    if: startsWith(${{ github.event.comment.body }}, '/e2e-deploy')
     runs-on: ubuntu-latest
     steps:
       - name: Github API Request
@@ -120,4 +94,14 @@ jobs:
               repo: context.repo.repo,
               labels: ["deploy-nextjs-start"]
             })
-
+      - name: Create version comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Congrats, e2e-deploy successfully!
+            Preview url: ${{ steps.e2e-deploy.outputs.url }}
+            commit-id: ${GITHUB_SHA}
+          reactions: eyes, hooray, rocket
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
