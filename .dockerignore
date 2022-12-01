@@ -3,5 +3,5 @@
 
 # Allow files and directories 这个不生效啊，等会儿来看吧, 好像是必须放在根目录下面
 
-!apps/nextjs-start/.next
-!common/deploy
+# !apps/nextjs-start/.next
+# !common/deploy
