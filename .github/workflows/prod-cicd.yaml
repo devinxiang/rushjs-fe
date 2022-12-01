@@ -1,44 +1,23 @@
-# 通过comment进行触发发布；
-
 name: Build and Deploy
 
 on:
-  issue_comment:
-    types: [created, edited]
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+
 env:
   APP_NAME: nextjs-start
 
 jobs:
-  get-comment:
+  build-and-deploy:
+    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')
     runs-on: ubuntu-latest
     steps:
-      - name: Echo comment body
-        run: |
-          echo "$GITHUB_CONTEXT"
+      - name: echo varants
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-
-  trigger-comment:
-    if: ${{ github.event.issue.pull_request }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Execute a comment command
-        id: check
-        uses: khan/pull-request-comment-trigger@v1.1.0
-        with:
-          trigger: '/e2e-deploy'
-          reaction: rocket
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-
-    outputs:
-      triggered: ${{ steps.check.outputs.triggered }}
-
-  build-and-deploy:
-    needs: [trigger-comment]
-    if: needs.trigger-comment.outputs.triggered == 'true'
-    runs-on: ubuntu-latest
-    steps:
+        run: echo "$GITHUB_CONTEXT"
       - name: Github API Request
         id: request
         uses: octokit/request-action@v2.0.0
