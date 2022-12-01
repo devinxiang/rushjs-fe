@@ -84,10 +84,10 @@ jobs:
       - name: rushjs deploy 🔧
         run: |
             node common/scripts/install-run-rush.js deploy -p ${APP_NAME}
-
+# time DOCKER_BUILDKIT=1 docker build --no-cache -f apps/${APP_NAME}/Dockerfile .
       - name: docker build 🔧
         run: |
-          time DOCKER_BUILDKIT=1 docker build --no-cache -f apps/${APP_NAME}/Dockerfile . -t nextjs-start-image
+          time docker build --no-cache -f apps/${APP_NAME}/Dockerfile . -t nextjs-start-image
       - name: See current ls
         run: |
             ls -R apps/nextjs-start
