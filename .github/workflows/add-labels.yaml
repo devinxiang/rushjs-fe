@@ -45,4 +45,4 @@ jobs:
               labels: ["deploy-nextjs-start"]
             })
         env:
-           COMMENT_JSON: ${{ fromJSON(steps.get_comment_json.outputs.COMMENT_LABELS) }}
+           COMMENT_JSON: ${{ steps.get_comment_json.outputs.COMMENT_LABELS }}
