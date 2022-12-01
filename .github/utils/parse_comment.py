@@ -6,4 +6,4 @@ temp = comment_body.split(':')
 res = temp[1].split(',')
 res_str = json.dumps(res)
 
-print(f"::set-output name=COMMENT_LABELS::{res_str}")
+print(f"::set-output name=COMMENT_LABELS::{res}")
