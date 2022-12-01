@@ -34,13 +34,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            echo "$COMMENT_LABELS"
+            echo "$LABEL"
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ["$COMMENT_LABELS"]
+              labels: [ $LABEL ]
             })
         env:
-           COMMENT_LABELS: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
+           LABEL: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
           #  COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}

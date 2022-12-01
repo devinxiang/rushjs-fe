@@ -6,7 +6,7 @@ temp = comment_body.split(':')
 
 res = temp[1].split(',')
 res_str = ','.join(res)
-
+# TODO 输出矩阵
 res_json = {
 	'name': temp[0],
 	'labels': temp[1]
