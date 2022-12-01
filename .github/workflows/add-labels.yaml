@@ -20,27 +20,49 @@ jobs:
       - name: Checkout repository content
         uses: actions/checkout@v2.3.4
 
-      - name: install Python
-        uses: actions/setup-python@v4
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        if: startsWith(${{ github.event.comment.body }}, 'add-labels:')
         with:
-          python-version: '3.10'
-      - name: get comment label
-        id: get_comment_label
-        env:
-          COMMENT_BODY: ${{ github.event.comment.body }}
-        run: |
-          python .github/utils/parse_comment.py
-      - name: Add release label
-        uses: actions/github-script@v6
+          text: ${{ github.event.comment.body }}
+          regex: '/([^:,]+)/ig'
+
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ steps.regex-match.outputs.match != '' }}
         with:
-          script: |
-            echo "$LABEL"
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: [ $LABEL ]
-            })
-        env:
-           LABEL: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
-          #  COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            ${{ steps.regex-match.outputs.group1 }}
+            ${{ steps.regex-match.outputs.group2 }}
+            ${{ steps.regex-match.outputs.group3 }}
+            ${{ steps.regex-match.outputs.group4 }}
+            ${{ steps.regex-match.outputs.group5 }}
+            ${{ steps.regex-match.outputs.group6 }}
+            ${{ steps.regex-match.outputs.group7 }}
+            ${{ steps.regex-match.outputs.group8 }}
+            ${{ steps.regex-match.outputs.group9 }}
+
+      # - name: install Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.10'
+      # - name: get comment label
+      #   id: get_comment_label
+      #   env:
+      #     COMMENT_BODY: ${{ github.event.comment.body }}
+      #   run: |
+      #     python .github/utils/parse_comment.py
+      # - name: Add release label
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       echo "$LABEL"
+      #       github.rest.issues.addLabels({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         labels: [ "nextjs-start" ]
+      #       })
+      #   env:
+      #      LABEL: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
+      #     #  COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}

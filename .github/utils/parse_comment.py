@@ -6,12 +6,14 @@ temp = comment_body.split(':')
 
 res = temp[1].split(',')
 res_str = ','.join(res)
-# TODO 输出矩阵
 res_json = {
 	'name': temp[0],
 	'labels': temp[1]
 }
 res_json_str = json.dumps(res_json)
 
-print(f"::set-output name=COMMENT_LABELS::{res_str}")
-# print(f"::set-output name=COMMENT_JSON::{res_json_str}")
+# 只能输出基本类型，null number boolean string
+name = 'COMMENT_LABELS'
+value = res_str
+with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+    print(f'{name}={value}', file=fh)
