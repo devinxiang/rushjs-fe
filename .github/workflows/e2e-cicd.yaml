@@ -41,9 +41,9 @@ jobs:
       - name: Get PR information
         id: pr_data
         run: |
-          echo "::set-output name=branch::${{ fromJson(steps.request.outputs.data).head.ref }}"
-          echo "::set-output name=repo_name::${{ fromJson(steps.request.outputs.data).base.repo.full_name }}"
-          echo "::set-output name=repo_clone_url::${{ fromJson(steps.request.outputs.data).base.repo.clone_url }}"
+          echo "branch=${{ fromJson(steps.request.outputs.data).head.ref }}" >> $GITHUB_OUTPUT
+          echo "repo_name=${{ fromJson(steps.request.outputs.data).base.repo.full_name }}" >> $GITHUB_OUTPUT
+          echo "repo_clone_url=${{ fromJson(steps.request.outputs.data).base.repo.clone_url }}" >> $GITHUB_OUTPUT
           echo "repo_ssh_url=${{ fromJson(steps.request.outputs.data).base.repo.ssh_url }}" >> $GITHUB_OUTPUT
 
       - name: Echo variants
