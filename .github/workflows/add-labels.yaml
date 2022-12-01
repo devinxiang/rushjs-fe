@@ -22,6 +22,7 @@ jobs:
 
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
+        if: startsWith(${{ github.event.comment.body }}, 'add-labels:')
         with:
           text: ${{ github.event.comment.body }}
           regex: '/([^:,]+)/ig'
