@@ -26,7 +26,7 @@ jobs:
         id: get_comment_label
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
-        run:
+        run: |
           python .github/utils/parse_comment.py
 
       - name: Add release label
