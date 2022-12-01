@@ -44,4 +44,4 @@ jobs:
             })
         env:
            COMMENT_LABELS: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
-           COMMENT_JSON: ${{ fromJson(steps.get_comment_label.outputs.COMMENT_JSON) }}
+           COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}
