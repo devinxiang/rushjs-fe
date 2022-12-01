@@ -39,7 +39,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ["deploy-nextjs-start"]
+              labels: ["$COMMENT_LABELS"]
             })
         env:
            COMMENT_LABELS: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
