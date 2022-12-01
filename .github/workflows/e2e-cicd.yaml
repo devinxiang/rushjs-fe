@@ -88,11 +88,15 @@ jobs:
       - name: docker build 🔧
         run: |
           time docker build -f apps/${APP_NAME}/Dockerfile . -t nextjs-start-image
-      - name: See current folder and file
+      - name: See current ls
         run: |
-            ls
             ls -R apps/nextjs-start
-            ls -R /apps/nextjs-start
+      - name: See current  ls -R apps/nextjs-start
+        run: |
+            ls -R apps/nextjs-start
+      - name: See current  ls -R apps/nextjs-start
+        run: |
+            ls -R apps/nextjs-start/.next
       - name: Add release label
         uses: actions/github-script@v6
         with:
