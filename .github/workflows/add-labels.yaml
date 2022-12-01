@@ -15,7 +15,7 @@ jobs:
           echo "$GITHUB_CONTEXT"
           echo "comment=${{ github.event.comment.body }}" >> $GITHUB_OUTPUT
         env:
-          GITHUB_CONTEXT: ${{ toJson(github). }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
 
       - name: install Python
         uses: actions/setup-python@v4
