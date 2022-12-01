@@ -100,7 +100,6 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             Congrats, e2e-deploy successfully!
-            Preview url: ${{ steps.e2e-deploy.outputs.url }}
             commit-id: ${GITHUB_SHA}
           reactions: eyes, hooray, rocket
         env:
