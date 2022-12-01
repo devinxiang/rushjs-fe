@@ -27,7 +27,7 @@ jobs:
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
-          python .github/utils/parse_comment.py
+          python .github/aps-tools/parse_comment.py
 
       - name: Add release label
         uses: actions/github-script@v6
