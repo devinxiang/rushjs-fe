@@ -1,4 +1,5 @@
 FROM node:16-buster as builder
+ls -R
 
 WORKDIR /opt/deploy
 RUN ls -R
