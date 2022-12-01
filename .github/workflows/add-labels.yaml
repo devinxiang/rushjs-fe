@@ -35,7 +35,6 @@ jobs:
         with:
           script: |
             echo "$COMMENT_LABELS"
-            echo "$COMMENT_JSON"
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -44,4 +43,4 @@ jobs:
             })
         env:
            COMMENT_LABELS: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
-           COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}
+          #  COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}
