@@ -29,7 +29,8 @@ jobs:
           body: |
             -----
             Congrats, add-labels successfully!
-            commit-id: "$GITHUB_SHA"
+            commit-id: $GITHUB_SHA
+            meganode-ui-PR: ${{ github.event.issue.html_url }}
           reactions: eyes, hooray, rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
