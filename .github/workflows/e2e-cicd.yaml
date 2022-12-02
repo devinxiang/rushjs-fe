@@ -4,7 +4,7 @@ name: Build and Deploy
 
 on:
   issue_comment:
-    types: [created, edited]
+    types: [created]
 env:
   APP_NAME: nextjs-start
 
@@ -97,7 +97,7 @@ jobs:
       - name: Create version comment
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: ${{ github.event.issue.number }}
+          comment-id: ${{ github.event.issue.commit.id }}
           body: |
             Congrats, e2e-deploy successfully!
             commit-id: "${GITHUB_SHA}"
