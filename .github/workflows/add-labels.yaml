@@ -30,7 +30,7 @@ jobs:
           body: |
             -----
             Congrats, add-labels successfully!
-            deploy-committ: "${{GITHUB_SHA}}""
+            commit-id: "$GITHUB_SHA"
           reactions: eyes, hooray, rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
