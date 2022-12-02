@@ -10,7 +10,7 @@ env:
 jobs:
   get-comment:
     runs-on: ubuntu-latest
-    if: startsWith(${{ github.event.comment.body }}, $TRIGGER_COMMAND)
+    if: startsWith(${{ github.event.comment.body }}, '/add-labels:deploy')
     steps:
       - name: Echo comment body
         run: |
