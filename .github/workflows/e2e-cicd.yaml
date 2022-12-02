@@ -7,10 +7,11 @@ on:
     types: [created]
 env:
   APP_NAME: nextjs-start
+  TRIGGER_COMMAND: /e2e-deploy:deploy
 
 jobs:
   build-and-deploy:
-    if: startsWith(${{ github.event.comment.body }}, '/e2e-deploy')
+    if: contains(${{ github.event.comment.body }}, ${TRIGGER_COMMAND})
     runs-on: ubuntu-latest
     steps:
       - name: Github API Request
