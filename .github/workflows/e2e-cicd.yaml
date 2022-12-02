@@ -11,7 +11,7 @@ env:
 
 jobs:
   build-and-deploy:
-    if: startsWith(${{ github.event.comment.body }}, '/e2e-deploy:deploy')
+    if: startsWith(github.event.comment.body, $TRIGGER_COMMAND)
     runs-on: ubuntu-latest
     steps:
       - name: Github API Request
