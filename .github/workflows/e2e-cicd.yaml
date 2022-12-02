@@ -98,7 +98,8 @@ jobs:
       - name: Create version comment
         uses: peter-evans/create-or-update-comment@v1
         with:
-          comment-id: ${{ github.event.issue.commit.id }}
+          comment-id: ${{ github.event.comment.id }}
+          issue-number: ${{ github.event.issue.number}}
           body: |
             Congrats, e2e-deploy successfully!
             commit-id: "${GITHUB_SHA}"

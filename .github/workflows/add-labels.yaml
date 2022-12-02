@@ -29,7 +29,7 @@ jobs:
           issue-number: ${{ github.event.issue.number}}
           body: |
             Congrats, e2e-deploy successfully!
-            deploy-commit: ${{ GITHUB_SHA }}
+            deploy-committ: "${{GITHUB_SHA}}""
           reactions: eyes, hooray, rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
