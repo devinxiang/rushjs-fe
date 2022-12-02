@@ -2,7 +2,7 @@ name: Add labels
 
 on:
   issue_comment:
-    types: [created, edited]
+    types: [created]
 env:
   APP_NAME: nextjs-start
 
