@@ -101,8 +101,9 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           issue-number: ${{ github.event.issue.number}}
           body: |
+            -----
             Congrats, e2e-deploy successfully!
-            commit-id: "${GITHUB_SHA}"
+            commit-id: "$GITHUB_SHA"
           reactions: eyes, hooray, rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
