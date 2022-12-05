@@ -23,7 +23,7 @@ jobs:
         with:
           script: |
             const str = "${{ github.event.comment.body }}".toString();
-            const arr = str.split(':')[0].split(',');
+            const arr = str.split(':')[1].split(',');
             console.log(arr);
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
