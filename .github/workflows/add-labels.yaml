@@ -22,7 +22,7 @@ jobs:
         id: parse-comment
         with:
           script: |
-            const str = ${{ github.event.comment.body }}.toString();
+            const str = "${{ github.event.comment.body }}".toString();
             const arr = str.split(',');
             console.log(arr);
 
