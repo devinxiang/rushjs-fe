@@ -22,8 +22,8 @@ jobs:
         id: parse-comment
         with:
           script: |
-            const str = ${{ github.event.comment.body }}
-            const arr = split(',');
+            const str = ${{ github.event.comment.body }}.toString();
+            const arr = str.split(',');
             console.log(arr);
 
       - name: Checkout repository content
