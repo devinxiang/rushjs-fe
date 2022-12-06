@@ -5,15 +5,19 @@ on:
     types:
       - closed
   workflow_dispatch:
-
-
+    inputs:
+      project:
+        description: 'release branch'
+        required: true
+        default: 'nextjs-start-deploy-prod-ready'
+        type: string
 
 env:
   APP_NAME: nextjs-start
 
 jobs:
   build-and-deploy:
-    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')
+    if: (github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')) || ${{ github.event.inputs.project == 'nextjs-start-deploy-prod-ready' }}
     runs-on: ubuntu-latest
     steps:
       - name: echo variants
