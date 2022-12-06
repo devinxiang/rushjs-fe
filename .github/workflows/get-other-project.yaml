@@ -52,13 +52,13 @@ jobs:
           echo "production_commit=${RELEASE_TAG}" >> $GITHUB_OUTPUT
       - name: show env
         run: |
-          echo "${{steps.get_production_commit.outputs.RELEASE_TAG}}"
+          echo "${{steps.get_production_commit.outputs.production_commit}}"
       - name: commit 2
         run: |
           # get current commit hash
           CURRENT_HASH=$(git rev-parse HEAD)
           # get last commit hash of last build dist
-          LAST_BUILD_HASH=${{steps.get_production_commit.outputs.RELEASE_TAG}}
+          LAST_BUILD_HASH="${{steps.get_production_commit.outputs.production_commit}}"
           DIFF=""
           # build and commit dist if diff
           # if last commit hash of last build dist was found, get logs of commits in btw for PR body
