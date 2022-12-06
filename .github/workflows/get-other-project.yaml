@@ -11,20 +11,19 @@ jobs:
   get-comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout previous commit
-        uses: actions/checkout@v3
-        with:
-          repository: randomxiang/github-actions-demo
-          ref: main
-          path: config/ui/values.yaml
-          token: ${{ secrets.GH_PAT }}
+      # - name: Checkout previous commit
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: randomxiang/github-actions-demo
+      #     ref: main
+      #     path: config/ui/values.yaml
+      #     token: ${{ secrets.GH_PAT }}
       - name: Checkout repository content
         uses: actions/checkout@v3
       - name: Commit
         run: |
-          ls
           CURRENT_HASH=$(git rev-parse HEAD)
-          LAST_BUILD_HASH="0190ae9da776407361080b404f61209adfa91430"
+          LAST_BUILD_HASH="51d9c8b7f078137f224b1d98ea04417437fa600e"
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
           DIFF="$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --oneline)"
