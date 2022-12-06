@@ -14,6 +14,10 @@ jobs:
     if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')
     runs-on: ubuntu-latest
     steps:
+      - name: get PR merged person userName = github.event.pull_request.merged_by.login
+        run: |
+          userName = ${{github.event.pull_request.merged_by.login}}
+          echo "Pull Request was merged by ${userName}"
       - name: echo varants
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
