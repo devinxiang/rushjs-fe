@@ -1,4 +1,4 @@
-module.export = async ({ github, context, core }) => {
+module.exports = async ({ github, context, core }) => {
 	try {
 		const str = context.payload.comment.body;
 		const arr = str.split(':')
