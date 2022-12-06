@@ -17,20 +17,27 @@ jobs:
           echo "comment=${{ github.event.comment.body }}" >> $GITHUB_OUTPUT
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
+      # - name: Parse comment by github script
+      #   uses: actions/github-script@v6
+      #   id: parse-comment
+      #   with:
+      #     script: |
+      #       const str = "${{ github.event.comment.body }}".toString();
+      #       const arr = str.split(':')[1].split(',');
+      #       console.log(arr);
+      #       github.rest.issues.addLabels({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         labels: arr
+      #       })
       - name: Parse comment by github script
         uses: actions/github-script@v6
         id: parse-comment
         with:
           script: |
-            const str = "${{ github.event.comment.body }}".toString();
-            const arr = str.split(':')[1].split(',');
-            console.log(arr);
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: arr
-            })
+             const { default: createDeployLabels } = await import(.github/utils/add-labels.js');
+             await createDeployLabels({github, context});
       - name: Checkout repository content
         uses: actions/checkout@v2.3.4
 
