@@ -80,5 +80,5 @@ jobs:
         uses: actions/github-script@v6
         with:
          script: |
-           const diff = "${{env.DIFF}}"
+           const diff = `${{env.DIFF}}`;
            console.log('diff', diff, typeof diff)
