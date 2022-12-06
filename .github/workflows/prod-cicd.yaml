@@ -6,6 +6,7 @@ on:
       - closed
   workflow_dispatch:
 
+
 env:
   APP_NAME: nextjs-start
 
