@@ -26,7 +26,8 @@ jobs:
           LAST_BUILD_HASH="51d9c8b7f078137f224b1d98ea04417437fa600e"
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
-          DIFF="$(git log --oneline)"
+          DIFF="$(git log --oneline > changelog.md)"
+          echo "$(cat changelog.md)"
           echo "$(git log)"
           echo "$DIFF"
         env:
