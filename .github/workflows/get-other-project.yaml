@@ -16,7 +16,7 @@ jobs:
       - name: Checkout previous commit
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/randomxiang/github-actions-demo
+          repository: randomxiang/github-actions-demo
           path: config/ui
       - name: Commit
         run: |
