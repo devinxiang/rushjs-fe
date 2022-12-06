@@ -21,14 +21,12 @@ jobs:
       - name: Checkout repository content
         uses: actions/checkout@v3
       - name: Commit
-        run: |-
-          set -e
+        run: |
           CURRENT_HASH=$(git rev-parse HEAD)
           LAST_BUILD_HASH="51d9c8b7f078137f224b1d98ea04417437fa600e"
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
           DIFF="$(git log --oneline)"
           echo "$DIFF"
-          echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
