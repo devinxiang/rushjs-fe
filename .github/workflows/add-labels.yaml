@@ -43,9 +43,6 @@ jobs:
         with:
           script: |
              const script = require('${{ github.workspace }}/.github/utils/add-labels.js');
-             console.log('context.payload.comment.body', context.payload.comment.body)
-             console.log('github', github);
-             console.log('context', context);
              await script({github, context, core});
       - name: Create version comment
         uses: peter-evans/create-or-update-comment@v2
