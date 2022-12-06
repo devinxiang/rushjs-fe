@@ -1,5 +1,5 @@
 export default async function CreateDeployLabels({github, context}) {
-	const str = "${{ context.comment.body }}";
+	const str = "${{ context.payload.comment.body }}";
 	const arr = str.split(':')
 	const labels = arr[1].split(',');
 
