@@ -27,7 +27,7 @@ jobs:
           LAST_BUILD_HASH="51d9c8b7f078137f224b1d98ea04417437fa600e"
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
-          DIFF="$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --oneline)"
+          DIFF="$(git log --oneline)"
           echo "$DIFF"
           echo "$GITHUB_CONTEXT"
         env:
