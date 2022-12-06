@@ -24,7 +24,7 @@ jobs:
         run: |
           ls
           CURRENT_HASH=$(git rev-parse HEAD)
-          LAST_BUILD_HASH="e5dd69cb748c30e8bb09e3e0a2e5359096630920"
+          LAST_BUILD_HASH="0190ae9da776407361080b404f61209adfa91430"
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
           DIFF="$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --oneline)"
