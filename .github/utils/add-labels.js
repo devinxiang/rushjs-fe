@@ -1,5 +1,6 @@
 module.exports = async ({github, context}) => {
-	const str = "${{ github.event.comment.body }}";
+	const str = github.event.comment.body;
+	console.log('str', str);
 	const arr = str.split(':')
 	const labels = arr[1].split(',');
 
