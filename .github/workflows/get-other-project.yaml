@@ -85,8 +85,8 @@ jobs:
          script: |
            const diffMsgs = `${{env.DIFF}}`;
            console.log('diffMsgs', diffMsgs, typeof diffMsgs)
-           const script = require(".github/utils/parse-commit-msg.js");
-           script({diffMsgs, core })
+           const script = require("${{ github.workspace }}.github/utils/parse-commit-msg.js");
+           await script({diffMsgs, core});
       - name: echo parse_commits
         run: |
           echo "${{ steps.parse_commits.outputs.commits }}"
