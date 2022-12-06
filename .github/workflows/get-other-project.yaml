@@ -45,7 +45,7 @@ jobs:
           then
                 echo "Unable to find last commit by bot, skipping diff gen"
           else
-                DIFF=$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --oneline)
+                DIFF=$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --pretty=oneline)
                 echo $DIFF
           fi
           # set env vars
