@@ -11,7 +11,7 @@ env:
 
 jobs:
   build-and-deploy:
-    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')
+    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'meganode-ui-release-ready')
     runs-on: ubuntu-latest
     steps:
       - name: echo varants
