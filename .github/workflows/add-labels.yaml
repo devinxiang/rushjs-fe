@@ -45,8 +45,6 @@ jobs:
              const { default: CreateDeployLabels } = await import('${{ github.workspace }}/.github/utils/add-labels.mjs');
              console.log('github', github);
              console.log('context', context);
-              console.log('context.comment', context.comment, typeof context.comment);
-              console.log('context.payload.comment', context.payload.comment, typeof  context.payload.comment);
              await CreateDeployLabels({github, context});
       - name: Create version comment
         uses: peter-evans/create-or-update-comment@v2
