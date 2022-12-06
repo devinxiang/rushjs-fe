@@ -9,7 +9,7 @@ env:
 jobs:
   get-comment:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.comment.body, '/add-labels:deploy')
+    if: startsWith(github.event.comment.body, '/add-labels:')
     steps:
       - name: Checkout repository content
         uses: actions/checkout@v2.3.4
@@ -42,8 +42,8 @@ jobs:
         id: parse-comment
         with:
           script: |
-             const { default: createDeployLabels } = await import('${{ github.workspace }}/.github/utils/add-labels.js');
-             await createDeployLabels({github, context});
+             const script = require('${{ github.workspace }}/.github/utils/add-labels.js')
+             await script({github, context})
       - name: Create version comment
         uses: peter-evans/create-or-update-comment@v2
         with:
