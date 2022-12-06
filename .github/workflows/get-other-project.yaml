@@ -1,0 +1,26 @@
+name: Add labels
+
+on:
+  push:
+    branches:
+      - "get-other-project"
+env:
+  APP_NAME: nextjs-start
+
+jobs:
+  get-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository content
+        uses: actions/checkout@v3
+      - name: Checkout previous commit
+        uses: actions/checkout@v3
+        with:
+          repository: https://github.com/randomxiang/github-actions-demo
+          path: config/ui
+      - name: Commit
+        run: |
+          ls
+          echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}

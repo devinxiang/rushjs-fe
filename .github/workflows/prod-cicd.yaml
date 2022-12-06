@@ -6,6 +6,8 @@ on:
       - closed
   workflow_dispatch:
 
+
+
 env:
   APP_NAME: nextjs-start
 
@@ -14,9 +16,10 @@ jobs:
     if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')
     runs-on: ubuntu-latest
     steps:
-      - name: echo varants
+      - name: echo variants
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
+
         run: echo "$GITHUB_CONTEXT"
       - name: Github API Request
         id: request
