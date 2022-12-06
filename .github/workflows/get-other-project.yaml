@@ -23,6 +23,12 @@ jobs:
       - name: Commit
         run: |
           ls
+          CURRENT_HASH=$(git rev-parse HEAD)
+          LAST_BUILD_HASH="$(yq r -j \"${{github.workspace}}\"/config/ui/values.yaml metadata.tags)"
+          echo "$LAST_BUILD_HASH"
+          echo "$CURRENT_HASH"
+          DIFF=$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --oneline)
+          echo $DIFF
           echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
