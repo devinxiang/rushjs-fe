@@ -42,11 +42,11 @@ jobs:
         id: parse-comment
         with:
           script: |
-             const { default: CreateDeployLabels } = await import('${{ github.workspace }}/.github/utils/add-labels.mjs');
+             const script = require('${{ github.workspace }}/.github/utils/add-labels.js');
              console.log('context.payload.comment.body', context.payload.comment.body)
              console.log('github', github);
              console.log('context', context);
-             await CreateDeployLabels({github, context});
+             await script({github, context, core});
       - name: Create version comment
         uses: peter-evans/create-or-update-comment@v2
         with:
