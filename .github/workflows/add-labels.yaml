@@ -18,7 +18,9 @@ jobs:
           echo "$GITHUB_CONTEXT"
           echo "comment=${{ github.event.comment.body }}" >> $GITHUB_OUTPUT
           echo  "${{github.workspace}}"
-          ls "${{github.workspace}}"
+          ls -a "${{github.workspace}}"
+          ls -a "${{github.workspace}}/.github"
+          ls -a "${{github.workspace}}/.github/utils"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
       # - name: Parse comment by github script
