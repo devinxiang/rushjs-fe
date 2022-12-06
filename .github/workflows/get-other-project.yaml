@@ -56,12 +56,18 @@ jobs:
         with:
           repository: randomxiang/github-actions-demo
           ref: main
-          path: config/ui
           token: ${{ secrets.GH_PAT }}
-
-      - name: get online release tag
+      - name: ls
+        run: |
+          ls
+      - name: ls config
+        run: |
+          ls config
+      - name: ls config/ui
         run: |
           ls config/ui
+      - name: get online release tag
+        run: |
           RELEASE_TAG=$(yq -r '.node-app.image.tag' config/ui/values.yaml)
           echo "${RELEASE_TAG}" >> $GITHUB_ENV
       - name: show env
