@@ -11,8 +11,6 @@ jobs:
   get-comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository content
-        uses: actions/checkout@v3
       - name: Checkout previous commit
         uses: actions/checkout@v3
         with:
@@ -20,6 +18,8 @@ jobs:
           ref: main
           path: config/ui/values.yaml
           token: ${{ secrets.GH_PAT }}
+      - name: Checkout repository content
+        uses: actions/checkout@v3
       - name: Commit
         run: |
           ls
