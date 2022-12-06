@@ -21,6 +21,7 @@ jobs:
           path: config/ui/values.yaml
           token: ${{ secrets.GH_PAT }}
       - name: Commit
+        uses: mikefarah/yq@master
         run: |
           ls
           CURRENT_HASH=$(git rev-parse HEAD)
