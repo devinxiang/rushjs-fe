@@ -11,10 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.event.comment.body, '/add-labels:deploy')
     steps:
-      - name: Echo comment body
+      - name: Checkout repository content
+        uses: actions/checkout@v2.3.4
+      - name: Echo GITHUB_CONTEXT
         run: |
           echo "$GITHUB_CONTEXT"
           echo "comment=${{ github.event.comment.body }}" >> $GITHUB_OUTPUT
+          echo  "${{github.workspace}}"
+          ls "${{github.workspace}}"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
       # - name: Parse comment by github script
@@ -38,9 +42,6 @@ jobs:
           script: |
              const { default: createDeployLabels } = await import('${{ github.workspace }}/.github/utils/add-labels.js');
              await createDeployLabels({github, context});
-      - name: Checkout repository content
-        uses: actions/checkout@v2.3.4
-
       - name: Create version comment
         uses: peter-evans/create-or-update-comment@v2
         with:
