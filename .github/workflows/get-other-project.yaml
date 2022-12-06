@@ -24,7 +24,7 @@ jobs:
         run: |
           ls
           CURRENT_HASH=$(git rev-parse HEAD)
-          LAST_BUILD_HASH="$(yq r -j config/ui/values.yaml node-app.image.tag)"
+          LAST_BUILD_HASH="$(yq r -o=json config/ui/values.yaml node-app.image.tag)"
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
           DIFF="$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --oneline)"
