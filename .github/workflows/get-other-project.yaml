@@ -19,7 +19,7 @@ jobs:
           repository: randomxiang/github-actions-demo
           ref: main
           path: config/ui/values.yaml
-          token: ${{ secrets.GH_GPT }}
+          token: ${{ secrets.GH_PAT }}
       - name: Commit
         run: |
           ls
