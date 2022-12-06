@@ -37,15 +37,15 @@ jobs:
           ref: main
           path: github-action-demo
           token: ${{ secrets.GH_PAT }}
-      - name: ls
+      - name: ls -a
         run: |
-          ls
-      - name: ls config
+          ls -a
+      - name: ls -a github-action-demo
         run: |
-          ls config
-      - name: ls config/ui
+          ls -a github-action-demo
+      - name: ls -a github-action-demo/config/ui
         run: |
-          ls config/ui
+          ls -a github-action-demo/config/ui
       - name: get online release tag
         id: get_production_commit
         run: |
