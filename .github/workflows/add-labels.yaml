@@ -36,7 +36,7 @@ jobs:
         id: parse-comment
         with:
           script: |
-             const { default: createDeployLabels } = await import(.github/utils/add-labels.js');
+             const { default: createDeployLabels } = await import('${{ github.workspace }}/.github/utils/add-labels.js');
              await createDeployLabels({github, context});
       - name: Checkout repository content
         uses: actions/checkout@v2.3.4
