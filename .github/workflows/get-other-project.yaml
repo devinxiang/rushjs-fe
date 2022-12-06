@@ -76,11 +76,17 @@ jobs:
           echo 'DIFF<<EOF' >> $GITHUB_ENV
           echo "${DIFF}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+    # const str = diff.split('\n').filter(m => !/^(Merge pull request|Merge branch)/.test(m)).join('\n');
+    #     console.log('str', str);
       - name: parse-comment
         uses: actions/github-script@v6
+        id: parse_commits
         with:
          script: |
-           const diff = `${{env.DIFF}}`;
+           const diffMsgs = `${{env.DIFF}}`;
            console.log('diff', diff, typeof diff)
-           const str = diff.split('\n').filter(m => !/^(Merge pull request|Merge branch)/.test(m)).join('\n');
-           console.log('str', str);
+           const script = require("${{github.workspace}}/.github/utils/parse-commit-msg.js");
+           script({diffMsgs, core })
+      - name: echo parse_commits
+        run: |
+          echo "${{ steps.parse_commits.outputs.commits }}"
