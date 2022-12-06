@@ -58,6 +58,7 @@ jobs:
         run: |
           # get current commit hash
           CURRENT_HASH=$(git rev-parse HEAD)
+          LAST_BUILD_HASH=${{steps.get_production_commit.outputs.production_commit}}
           # get last commit hash of last build dist
           DIFF=""
           # build and commit dist if diff
