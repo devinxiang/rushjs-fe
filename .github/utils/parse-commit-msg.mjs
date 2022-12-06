@@ -1,15 +1,8 @@
-export default async function ParseCommitMsg({commitMsgs}) {
-	const str = context.payload.comment.body;
-	console.log('str', str, context.comment)
-	const arr = str.split(':')
-	const labels = arr[1].split(',');
+import {core} from '@actions'
 
-	if (arr[0] === '/add-labels') {
-		await github.rest.issues.addLabels({
-			issue_number: context.issue.number,
-			owner: context.repo.owner,
-			repo: context.repo.repo,
-			labels: labels
-		})
-	}
+export default async function ParseCommitMsg({ commitMsgs }) {
+	const commits = commitMsgs.split('/n').filter(m => !/^Merge pull request/.test(m))
+	.map(m => m.replace(/\n+(.*)/g, '\n> $1'))
+	.map(m => `> ${m}`)
+	.join('\n')
 }

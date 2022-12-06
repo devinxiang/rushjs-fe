@@ -82,3 +82,5 @@ jobs:
          script: |
            const diff = `${{env.DIFF}}`;
            console.log('diff', diff, typeof diff)
+           const str = commitMsgs.split('/n').filter(m => !/^Merge pull request/.test(m)).map(m => m.replace(/\n+(.*)/g, '\n> $1')).map(m => `> ${m}`).join('\n');
+           console.log('str', str)
