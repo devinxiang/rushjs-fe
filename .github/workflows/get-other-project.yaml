@@ -27,6 +27,7 @@ jobs:
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
           DIFF="$(git log --oneline)"
+          echo "$(git log)"
           echo "$DIFF"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
