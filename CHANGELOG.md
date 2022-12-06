@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/randomxiang/rushjs-fe/compare/v1.0.0...v1.1.0) (2022-12-06)
+
+
+### Features
+
+* test ([7dad1f0](https://github.com/randomxiang/rushjs-fe/commit/7dad1f058770722171c72e18a18b87cf8d4826e6))
+
 ## 1.0.0 (2022-12-06)
 
 
