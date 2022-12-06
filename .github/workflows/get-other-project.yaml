@@ -70,7 +70,7 @@ jobs:
         id: get_production_commit
         run: |
           RELEASE_TAG=$(yq -r '.node-app.image.tag' config/ui/values.yaml)
-          echo "${RELEASE_TAG}" >> $GITHUB_OUTPUT
+          echo "production_commit=${RELEASE_TAG}" >> $GITHUB_OUTPUT
       - name: show env
         run: |
           echo ${steps.get_production_commit.outputs.RELEASE_TAG}
