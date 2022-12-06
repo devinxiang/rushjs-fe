@@ -20,6 +20,8 @@ jobs:
       #     token: ${{ secrets.GH_PAT }}
       - name: Checkout repository content
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Commit
         run: |
           CURRENT_HASH=$(git rev-parse HEAD)
@@ -27,7 +29,9 @@ jobs:
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
           DIFF="$(git log --oneline > changelog.md)"
+          echo "------------"
           echo "$(cat changelog.md)"
+          echo "------------"
           echo "$(git log)"
           echo "$DIFF"
         env:
