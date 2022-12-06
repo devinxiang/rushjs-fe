@@ -1,4 +1,4 @@
-export default function CreateDeployLabel({github, context}) {
+module.exports = async ({github, context}) {
 	const str = "${{ github.event.comment.body }}";
 	const arr = str.split(':')
 	const labels = arr[1].split(',');
