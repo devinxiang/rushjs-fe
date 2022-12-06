@@ -42,10 +42,10 @@ jobs:
           ls -a
       - name: ls -a github-action-demo
         run: |
-          ls -a github-action-demo
-      - name: ls -a github-action-demo/config/ui
+          ls -a .github
+      - name: ls -a .github/utils
         run: |
-          ls -a github-action-demo/config/ui
+          ls -a .github/utils
       - name: get online release tag
         id: get_production_commit
         run: |
@@ -85,7 +85,7 @@ jobs:
          script: |
            const diffMsgs = `${{env.DIFF}}`;
            console.log('diffMsgs', diffMsgs, typeof diffMsgs)
-           const script = require("${{github.workspace}}/.github/utils/parse-commit-msg.js");
+           const script = require(".github/utils/parse-commit-msg.js");
            script({diffMsgs, core })
       - name: echo parse_commits
         run: |
