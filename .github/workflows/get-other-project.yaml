@@ -21,11 +21,10 @@ jobs:
           path: config/ui/values.yaml
           token: ${{ secrets.GH_PAT }}
       - name: Commit
-        uses: mikefarah/yq@master
         run: |
           ls
           CURRENT_HASH=$(git rev-parse HEAD)
-          LAST_BUILD_HASH="$(yq r -o=json config/ui/values.yaml node-app.image.tag)"
+          LAST_BUILD_HASH="e5dd69cb748c30e8bb09e3e0a2e5359096630920"
           echo "$LAST_BUILD_HASH"
           echo "$CURRENT_HASH"
           DIFF="$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --oneline)"
