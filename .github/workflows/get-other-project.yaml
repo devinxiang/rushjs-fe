@@ -29,28 +29,7 @@ jobs:
           echo "$DIFF"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-      - name: commit 2
-        run: |
-          # get current commit hash
-          CURRENT_HASH=$(git rev-parse HEAD)
-          # get last commit hash of last build dist
-          LAST_BUILD_HASH="49983c09cb5d2a9336ec794d2965e6d430d7aebd"
-          DIFF=""
-          # build and commit dist if diff
-          # if last commit hash of last build dist was found, get logs of commits in btw for PR body
-          if [ -z "$LAST_BUILD_HASH" ]
-          then
-                echo "Unable to find last commit by bot, skipping diff gen"
-          else
-                DIFF=$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --pretty=oneline)
-                echo $DIFF
-          fi
-          # set env vars
-          echo "CURRENT_HASH=${CURRENT_HASH}" >> $GITHUB_ENV
-          echo "LAST_BUILD_HASH=${LAST_BUILD_HASH}" >> $GITHUB_ENV
-          echo 'DIFF<<EOF' >> $GITHUB_ENV
-          echo "${DIFF}" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+
       - name: Checkout previous commit
         uses: actions/checkout@v3
         with:
@@ -73,4 +52,26 @@ jobs:
           echo "production_commit=${RELEASE_TAG}" >> $GITHUB_OUTPUT
       - name: show env
         run: |
-          echo ${steps.get_production_commit.outputs.RELEASE_TAG}
+          echo "${{steps.get_production_commit.outputs.RELEASE_TAG}}"
+      - name: commit 2
+        run: |
+          # get current commit hash
+          CURRENT_HASH=$(git rev-parse HEAD)
+          # get last commit hash of last build dist
+          LAST_BUILD_HASH=${{steps.get_production_commit.outputs.RELEASE_TAG}}
+          DIFF=""
+          # build and commit dist if diff
+          # if last commit hash of last build dist was found, get logs of commits in btw for PR body
+          if [ -z "$LAST_BUILD_HASH" ]
+          then
+                echo "Unable to find last commit by bot, skipping diff gen"
+          else
+                DIFF=$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --pretty=oneline)
+                echo $DIFF
+          fi
+          # set env vars
+          echo "CURRENT_HASH=${CURRENT_HASH}" >> $GITHUB_ENV
+          echo "LAST_BUILD_HASH=${LAST_BUILD_HASH}" >> $GITHUB_ENV
+          echo 'DIFF<<EOF' >> $GITHUB_ENV
+          echo "${DIFF}" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
