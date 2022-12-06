@@ -80,5 +80,5 @@ jobs:
         uses: actions/github-script@v6
         with:
          script: |
-           const str = ${{steps.get_production_commit.outputs.production_commit}}.filter(m => !/^Merge pull request/.test(m)).map(m => m.replace(/\n+(.*)/g, '\n> $1')).map(m => `> ${m}`).join('\n')
-           console.log('str', str)
+           const diff = "${{steps.get_production_commit.outputs.production_commit}}"
+           console.log('diff', diff, typeof diff)
