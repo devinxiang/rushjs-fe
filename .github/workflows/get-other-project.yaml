@@ -80,5 +80,5 @@ jobs:
         uses: actions/github-script@v6
         with:
          script: |
-           const diff = "${{steps.get_production_commit.outputs.production_commit}}"
+           const diff = "${{env.DIFF}}"
            console.log('diff', diff, typeof diff)
