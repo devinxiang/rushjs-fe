@@ -123,6 +123,8 @@ jobs:
           name: ${{ github.event.pull_request.number }}_diff_commits
           path: ./artifacts
       - name: Display structure of downloaded files
+        run: ls -R
+      - name: Display structure of downloaded files
         run: |
           FILE_NAME=${{ github.event.pull_request.number }}_diff_commits
           echo $FILE_NAME
