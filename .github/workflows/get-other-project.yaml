@@ -93,7 +93,8 @@ jobs:
           echo 'DIFF_COMMITS<<EOF' >> $GITHUB_ENV
           echo "${DIFF_COMMITS}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-          echo $DIFF_COMMITS > diff_commits
+          echo "$DIFF_COMMITS"
+          echo "$DIFF_COMMITS" > diff_commits
       - name: Echo github sha
         run: |
           echo "${GITHUB_SHA}"
