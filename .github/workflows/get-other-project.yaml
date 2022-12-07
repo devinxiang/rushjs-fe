@@ -93,11 +93,35 @@ jobs:
           echo 'DIFF_COMMITS<<EOF' >> $GITHUB_ENV
           echo "${DIFF_COMMITS}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+      - name: Echo github sha
+        run: |
+          echo "${GITHUB_SHA}"
+
+      - name: Upload diff commits
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.pull_request.number }}_diff_commits
+          path: ${{ steps.parse_commits.outputs.commits }}
 
   CD:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout github action demo
+        uses: actions/checkout@v3
+
       - name: test env
         run: |
+          echo "${GITHUB_SHA}"
           echo '----------------'
           echo "${{ env.DIFF_COMMITS }}"
+
+      - name: Upload diff commits
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.pull_request.number }}_diff_commits
+          path: ./artifacts
+      - name: Display structure of downloaded files
+        run: |
+          ls -R
+          DIFF_COMMITS=$(cat artifacts/image_tag)
+          echo $DIFF_COMMITS
