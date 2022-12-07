@@ -124,7 +124,8 @@ jobs:
           path: ./artifacts
       - name: Display structure of downloaded files
         run: |
-          ls -R
-          DIFF_COMMITS=$(cat artifacts/\"${{ github.event.pull_request.number }}\"_diff_commits)
+          FILE_NAME=${{ github.event.pull_request.number }}_diff_commits
+          echo $FILE_NAME
+          DIFF_COMMITS=$(cat artifacts/$FILE_NAME)
           echo '------------------'
           echo $DIFF_COMMITS
