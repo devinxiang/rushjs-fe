@@ -1,4 +1,4 @@
-name: Add labels
+name: get other project
 
 on:
   push:
@@ -89,8 +89,10 @@ jobs:
            await script({diffMsgs, core});
       - name: echo parse_commits
         run: |
-          echo "diff_commits=${{ steps.parse_commits.outputs.commits }}" >> $GITHUB_ENV
-
+          DIFF_COMMITS="${{ steps.parse_commits.outputs.commits }}"
+          echo 'DIFF_COMMITS<<EOF' >> $GITHUB_ENV
+          echo "${DIFF_COMMITS}" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
   CD:
     runs-on: ubuntu-latest
@@ -98,4 +100,4 @@ jobs:
       - name: test env
         run: |
           echo '----------------'
-          echo "${{ env.diff_commits }}"
+          echo "${{ env.DIFF_COMMITS }}"
