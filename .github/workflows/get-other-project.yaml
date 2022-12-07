@@ -93,6 +93,7 @@ jobs:
           echo 'DIFF_COMMITS<<EOF' >> $GITHUB_ENV
           echo "${DIFF_COMMITS}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+          echo $DIFF_COMMITS > diff_commits
       - name: Echo github sha
         run: |
           echo "${GITHUB_SHA}"
@@ -101,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ github.event.pull_request.number }}_diff_commits
-          path: ${{ steps.parse_commits.outputs.commits }}
+          path: diff_commits
 
   CD:
     runs-on: ubuntu-latest
