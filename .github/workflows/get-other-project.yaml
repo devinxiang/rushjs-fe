@@ -124,5 +124,5 @@ jobs:
       - name: Display structure of downloaded files
         run: |
           ls -R
-          DIFF_COMMITS=$(cat artifacts/image_tag)
+          DIFF_COMMITS=$(cat artifacts/"${{ github.event.pull_request.number }}_diff_commits")
           echo $DIFF_COMMITS
