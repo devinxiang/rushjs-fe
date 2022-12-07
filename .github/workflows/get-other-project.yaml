@@ -8,7 +8,7 @@ env:
   APP_NAME: nextjs-start
 
 jobs:
-  get-comment:
+  CI:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository content
@@ -49,7 +49,7 @@ jobs:
       - name: get online release tag
         id: get_production_commit
         run: |
-          RELEASE_TAG=$(yq -r '.node-app.image.tag' github-action-demo/config/ui/values.yaml)
+          RELEASE_TAG=$(yq eval '.node-app.image.tag' github-action-demo/config/ui/values.yaml)
           echo "production_commit=${RELEASE_TAG}" >> $GITHUB_OUTPUT
       - name: show env
         run: |
@@ -89,4 +89,13 @@ jobs:
            await script({diffMsgs, core});
       - name: echo parse_commits
         run: |
-          echo "${{ steps.parse_commits.outputs.commits }}"
+          echo "diff_commits=${{ steps.parse_commits.outputs.commits }}" >> $GITHUB_ENV
+
+
+  CD:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test env
+        run: |
+          echo '----------------'
+          echo "${{ env.diff_commits }}"
