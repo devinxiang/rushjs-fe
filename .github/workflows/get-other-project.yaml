@@ -102,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ github.event.pull_request.number }}_diff_commits
-          path: diff_commits
+          path: ${{ github.event.pull_request.number }}_diff_commits
 
   CD:
     runs-on: ubuntu-latest
