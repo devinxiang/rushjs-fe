@@ -5,20 +5,28 @@ on:
     types:
       - closed
   workflow_dispatch:
+    inputs:
+      project:
+        description: 'release branch'
+        required: true
+        default: 'nextjs-start-deploy-prod-ready'
+        type: string
 
 env:
   APP_NAME: nextjs-start
 
 jobs:
   build-and-deploy:
-    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'meganode-ui-release-ready')
+    if: (github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')) || ${{ github.event.inputs.project == 'nextjs-start-deploy-prod-ready' }}
     runs-on: ubuntu-latest
     steps:
-      - name: echo varants
+      - name: echo variants
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
+
         run: echo "$GITHUB_CONTEXT"
       - name: Github API Request
+        if: (github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready'))
         id: request
         uses: octokit/request-action@v2.0.0
         with:
@@ -27,6 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get PR information
+        if: (github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready'))
         id: pr_data
         run: |
           echo "branch=${{ fromJson(steps.request.outputs.data).head.ref }}" >> $GITHUB_OUTPUT
@@ -35,16 +44,25 @@ jobs:
           echo "repo_ssh_url=${{ fromJson(steps.request.outputs.data).base.repo.ssh_url }}" >> $GITHUB_OUTPUT
 
       - name: Echo variants
+        if: (github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready'))
         run: |
           echo "${{ steps.pr_data.outputs.repo_ssh_url }}"
           echo "${{ steps.pr_data.outputs.repo_clone_url }}"
 
       - name: Checkout 🛎️
         uses: actions/checkout@v3
+        if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start-deploy-prod-ready')
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
           ref: ${{ steps.pr_data.outputs.branch }}
+
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        if: ${{ github.event.inputs.project == 'nextjs-start-deploy-prod-ready' }}
+        with:
+          ref: main
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:

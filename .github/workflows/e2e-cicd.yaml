@@ -7,7 +7,6 @@ on:
     types: [created]
 env:
   APP_NAME: nextjs-start
-  TRIGGER_COMMAND:
 
 jobs:
   build-and-deploy:
