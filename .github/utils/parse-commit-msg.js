@@ -1,7 +1,7 @@
 // Output: commits<string> | error
-module.exports = async ({ diff_commits, core }) => {
+module.exports = async ({ diffMsgs, core }) => {
 	try {
-		const commits = diff_commits
+		const commits = diffMsgs
 			.split('\n')
 			.filter(
 				(m) =>
