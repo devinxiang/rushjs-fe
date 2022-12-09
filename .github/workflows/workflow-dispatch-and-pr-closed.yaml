@@ -24,7 +24,6 @@ jobs:
       - name: Echo Github inputs
         run: |
           echo ${{toJson(github.event.inputs)}}
-            - name: Github inputs
       - name: Echo Github events
         run: |
           echo ${{toJson(github.event)}}
