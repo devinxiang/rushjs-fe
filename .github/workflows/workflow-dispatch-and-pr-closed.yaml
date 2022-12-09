@@ -1,0 +1,23 @@
+name: Test workflow dispatch and pr request merged trigger
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'release nextjs-start by manually'
+        required: true
+        default: 'nextjs-start'
+        type: string
+
+jobs:
+   CI:
+    runs-on: [self-hosted, qa-infra-k8s]
+    if: (github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start')) || ${{ github.event.inputs.project == 'nextjs-start' }}
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
