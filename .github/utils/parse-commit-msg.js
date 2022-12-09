@@ -2,7 +2,7 @@
 module.exports = async ({ diffMsgs, core }) => {
 	console.log('diffMsgs-333333', diffMsgs);
 	try {
-		const commits = diffMsgs.split('\n').filter(
+		const commits = diffMsgs.toString().split('\n').filter(
 				(m) => !/^(Merge pull request|Merge branch|Merge remote-tracking)/.test(m) && !!m
 			)
 			.map((m) => `- ${m}`)
