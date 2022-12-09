@@ -3,7 +3,7 @@ name: Test workflow dispatch and pr request merged trigger
 on:
   pull_request:
     types:
-      - merged
+      - closed
     branches:
       - main
   workflow_dispatch:
