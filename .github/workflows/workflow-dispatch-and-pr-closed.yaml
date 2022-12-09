@@ -16,7 +16,7 @@ on:
 
 jobs:
    CI:
-    runs-on: [self-hosted, qa-infra-k8s]
+    runs-on: ubuntu-latest
     if: (github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nextjs-start')) || ${{ github.event.inputs.project == 'nextjs-start' }}
     steps:
       - name: Checkout 🛎️
