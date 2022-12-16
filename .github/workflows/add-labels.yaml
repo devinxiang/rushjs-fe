@@ -53,7 +53,7 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           issue-number: ${{ github.event.issue.number}}
           body: |
-            -----
+            --
             Congrats, add-labels successfully!
             commit-id: $GITHUB_SHA
             meganode-ui-PR: ${{ github.event.issue.html_url }}
@@ -108,3 +108,26 @@ jobs:
       #   env:
       #      LABEL: ${{ steps.get_comment_label.outputs.COMMENT_LABELS }}
       #     #  COMMENT_JSON: ${{ steps.get_comment_label.outputs.COMMENT_JSON }}
+  CD:
+    needs: [get-comment]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run FAILING script
+        run: exit 1
+
+  Check-Jobs-Status:
+    runs-on: ubuntu-latest
+    if: ${{ always() && contains(join(needs.*.result, ','), 'failure') }}
+    needs: [get-comment, CD]
+    steps:
+      - name: Create Failure Feedback
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          issue-number: ${{ github.event.issue.number}}
+          body: |
+            --
+            Sorry, this runner occurs something wrong.
+          reactions: thinking_face
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
