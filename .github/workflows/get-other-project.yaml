@@ -11,6 +11,8 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
+      - name: Run shell cmd
+        run: echo "https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}"
       - name: Checkout repository content
         uses: actions/checkout@v3
         with:
