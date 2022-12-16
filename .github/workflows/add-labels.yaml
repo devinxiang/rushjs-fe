@@ -128,6 +128,6 @@ jobs:
           body: |
             ======
             Sorry, this runner occurs something unexpected error, please check [it](https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}) for more detail.
-          reactions: thinking_face
+          reactions: confused
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
