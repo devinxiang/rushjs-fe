@@ -53,7 +53,7 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           issue-number: ${{ github.event.issue.number}}
           body: |
-            --
+            ======
             Congrats, add-labels successfully!
             commit-id: $GITHUB_SHA
             meganode-ui-PR: ${{ github.event.issue.html_url }}
@@ -126,8 +126,8 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           issue-number: ${{ github.event.issue.number}}
           body: |
-            --
-            Sorry, this runner occurs something wrong.
+            ======
+            Sorry, this runner occurs something unexpected error, please check [it](https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}) for more detail.
           reactions: thinking_face
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
