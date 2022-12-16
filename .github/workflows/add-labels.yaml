@@ -6,11 +6,14 @@ on:
 env:
   APP_NAME: nextjs-start
 
+
 jobs:
   get-comment:
     runs-on: ubuntu-latest
     if: startsWith(github.event.comment.body, '/add-labels:deploy')
     steps:
+      - name: Run shell cmd
+        run: echo "https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}"
       - name: Checkout repository content
         uses: actions/checkout@v2.3.4
       - name: Echo GITHUB_CONTEXT
@@ -54,6 +57,7 @@ jobs:
             Congrats, add-labels successfully!
             commit-id: $GITHUB_SHA
             meganode-ui-PR: ${{ github.event.issue.html_url }}
+            Action Jobs: https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}
           reactions: eyes, hooray, rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

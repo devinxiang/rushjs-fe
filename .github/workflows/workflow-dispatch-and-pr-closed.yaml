@@ -21,11 +21,6 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
-      - name: Echo Github inputs
-        run: |
-          echo ${{toJson(github.event.inputs)}}
-            - name: Github inputs
       - name: Echo Github events
         run: |
           echo ${{toJson(github.event)}}
-            - name: Github inputs
