@@ -10,7 +10,8 @@ env:
 jobs:
   get-comment:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.comment.body, '$TRIGGER_CMD')
+    # if 里面确实没办法识别变量
+    if: startsWith(github.event.comment.body, '/add-labels')
     steps:
       - name: Run shell cmd
         run: |
