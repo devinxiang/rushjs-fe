@@ -19,7 +19,6 @@ env:
 
 jobs:
   ECHO-ENV:
-    if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
       - name: Echo GITHUB_CONTEXT
