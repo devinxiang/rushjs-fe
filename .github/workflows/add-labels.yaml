@@ -5,12 +5,12 @@ on:
     types: [created, edited]
 env:
   APP_NAME: nextjs-start
-
+  TRIGGER_CMD: /add-labels
 
 jobs:
   get-comment:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.comment.body, '/add-labels:deploy')
+    if: startsWith(github.event.comment.body, $TRIGGER_CMD)
     steps:
       - name: Run shell cmd
 
