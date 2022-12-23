@@ -1,0 +1,34 @@
+name: Close pr trigger
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'release project by manually'
+        required: true
+        default: 'nextjs-start'
+        type: string
+env:
+  APP_NAME: nextjs-start
+
+
+jobs:
+  ECHO-ENV:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo GITHUB_CONTEXT
+        run: |
+          echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+      - name: Echo trigger actor
+        run: |
+          echo ${{ github.event.issue.user.login || github.triggering_actor }}
+      - name: Echo event pull url
+        run: |
+          echo ${{  github.event.issue.html_url || github.event.pull_request._links.html.href || 'master' }}
