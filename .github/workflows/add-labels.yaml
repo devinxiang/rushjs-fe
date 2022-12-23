@@ -13,7 +13,6 @@ jobs:
     if: startsWith(github.event.comment.body, $TRIGGER_CMD)
     steps:
       - name: Run shell cmd
-
         run: |
           echo "https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}"
           echo "https://github.com/randomxiang/rushjs-fe/actions/runs/${{github.run_id}}"
@@ -59,6 +58,7 @@ jobs:
             ======
             Congrats, add-labels successfully!
             commit-id: $GITHUB_SHA
+            APP_NAME: $APP_NAME
             meganode-ui-PR: ${{ github.event.issue.html_url }}
             Action Jobs: https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}
           reactions: eyes, hooray, rocket
