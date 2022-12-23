@@ -1,0 +1,19 @@
+name: Close pr trigger
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+env:
+  APP_NAME: nextjs-start
+
+jobs:
+  ECHO-ENV:
+    if: github.event.pull_request.merged
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo GITHUB_CONTEXT
+        run: |
+          echo "$GITHUB_CONTEXT"
