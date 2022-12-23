@@ -17,6 +17,7 @@ env:
   APP_NAME: nextjs-start
 
 
+
 jobs:
   ECHO-ENV:
     if: github.event.pull_request.merged
