@@ -31,4 +31,4 @@ jobs:
           echo ${{ github.event.issue.user.login || github.triggering_actor }}
       - name: Echo event pull url
         run: |
-          echo ${{  github.event.issue.html_url || github.event.pull_request._links.html.href }}
+          echo ${{  github.event.issue.html_url || github.event.pull_request._links.html.href || 'master' }}
