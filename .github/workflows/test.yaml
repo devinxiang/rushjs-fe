@@ -41,3 +41,7 @@ jobs:
             const diff_commits = `${{env.DIFF}}`
             const script = require("${{ github.workspace }}/.github/utils/parse-diff-commits.js");
             await script({diff_commits, core});
+      - name: Generate Artifacts
+        run: |
+          mkdir temp
+          echo "${{ steps.prune_commit_msg.outputs.commits }}" > temp/commit_changes
