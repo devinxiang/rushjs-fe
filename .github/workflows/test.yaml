@@ -17,6 +17,9 @@ jobs:
           CURRENT_HASH=$(git rev-parse HEAD)
           LAST_BUILD_HASH=646b7c4b76cca43fd868cf5fc9244577986b0000
           DIFF=""
+          echo 'DIFF<<EOF' >> $GITHUB_ENV
+          echo "${DIFF}" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
           if [ -z "$LAST_BUILD_HASH" ]
           then
                 echo "Unable to find last commit by bot, skipping diff gen"
