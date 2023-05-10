@@ -45,3 +45,9 @@ jobs:
         run: |
           mkdir temp
           echo "${{ steps.prune_commit_msg.outputs.commits }}" > temp/commit_changes
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: "test_qa_artifacts"
+          path: temp
+          if-no-files-found: error
