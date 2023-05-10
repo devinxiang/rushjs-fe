@@ -20,19 +20,20 @@ jobs:
           echo 'DIFF<<EOF' >> $GITHUB_ENV
           echo "${DIFF}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-          if [ -z "$LAST_BUILD_HASH" ]
-          then
-                echo "Unable to find last commit by bot, skipping diff gen"
-          else
-                DIFF=$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --pretty=format:%s)
-                echo $DIFF
-          fi
-          echo 'DIFF<<EOF' >> $GITHUB_ENV
-          echo "${DIFF}" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          # if [ -z "$LAST_BUILD_HASH" ]
+          # then
+          #       echo "Unable to find last commit by bot, skipping diff gen"
+          # else
+          #       DIFF=$(git log ${LAST_BUILD_HASH}...${CURRENT_HASH} --pretty=format:%s)
+          #       echo $DIFF
+          # fi
+          # echo 'DIFF<<EOF' >> $GITHUB_ENV
+          # echo "${DIFF}" >> $GITHUB_ENV
+          # echo 'EOF' >> $GITHUB_ENV
       - name: Prune Commit Msg
         id: prune_commit_msg
         uses: actions/github-script@v6
         with:
           script: |
             echo "${{env.DIFF}}"
+          debug: true
