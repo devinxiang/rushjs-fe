@@ -33,3 +33,11 @@ jobs:
       - name: Prune Commit Msg
         run: |
             echo "${{env.DIFF}}"
+      - name: Prune Commit Msg
+        id: prune_commit_msg
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const diff_commits = `${{env.DIFF}}`
+            const script = require("${{ github.workspace }}/.github/utils/parse-diff-commits.js");
+            await script({diff_commits, core});
