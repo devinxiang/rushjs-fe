@@ -32,6 +32,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            echo ------
+            echo "------"
             echo "${{env.DIFF}}"
-            echo ------
+            echo "------"
