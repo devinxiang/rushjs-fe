@@ -1,4 +1,4 @@
-name: Add labels
+name: test collection
 
 on:
   push:
@@ -32,6 +32,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            echo '------'
+            echo ------
             echo "${{env.DIFF}}"
-            echo '------'
+            echo ------
