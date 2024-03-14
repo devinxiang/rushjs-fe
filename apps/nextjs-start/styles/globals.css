@@ -24,3 +24,13 @@ a {
     background: black;
   }
 }
+
+@media (prefers-color-scheme: teal) {
+  html {
+    color-scheme: teal;
+  }
+  body {
+    color: teal;
+    background: rgb(169, 58, 58);
+  }
+}
