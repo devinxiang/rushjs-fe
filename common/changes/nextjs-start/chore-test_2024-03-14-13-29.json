@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "nextjs-start",
+      "comment": "test change",
+      "type": "patch"
+    }
+  ],
+  "packageName": "nextjs-start"
+}
