@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 let commitHash = 'no-git-commit';
+// Get git commit hash
 try {
   commitHash = process.env.COMMIT_SHA || 'no-git-commit';
 } catch (error) {
