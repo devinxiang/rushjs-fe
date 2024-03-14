@@ -398,7 +398,8 @@
   "projects": [
     {
       "packageName": "nextjs-start",
-      "projectFolder": "apps/nextjs-start"
+      "projectFolder": "apps/nextjs-start",
+      "shouldPublish": true,
     }
     // {
     //   /**
