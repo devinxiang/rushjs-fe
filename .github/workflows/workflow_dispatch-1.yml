@@ -33,50 +33,36 @@ jobs:
       uses: juliangruber/read-file-action@v1
       with:
         path: .github/CODEOWNERS
-    - name: Check if ref is a valid tag on main branch
+    - name: Check ref validity
       id: check_ref
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const { repo, owner } = context.repo;
-          const ref = '${{ github.event.inputs.ref }}';
-          let is_valid_ref = false;
-          let ref_type = ''; # Can be 'branch' or 'tag'
+      run: |
+        REF="${{ github.event.inputs.ref }}"
+        MAIN_BRANCH="main"
+        IS_VALID_REF="false"
+        ERROR_MESSAGE=""
 
-          # Check if ref is main branch
-          if (ref === 'main') {
-            is_valid_ref = true;
-            ref_type = 'branch';
-          } else {
-            # Check if ref is a tag
-            const tags = await github.rest.git.listMatchingRefs({
-              owner,
-              repo,
-              ref: `tags/${ref}`,
-            });
+        # Fetch tags and main branch commits in advance
+        git fetch --tags
+        MAIN_COMMITS=$(git rev-list "$MAIN_BRANCH")
 
-            if (tags.data.length > 0) {
-              # If it's a tag, check if the tag is on the main branch
-              const commitsOnMain = await github.rest.repos.listCommits({
-                owner,
-                repo,
-                sha: 'main',
-                per_page: 100,
-              });
+        if [ "$REF" == "$MAIN_BRANCH" ]; then
+          IS_VALID_REF="true"
+        elif git tag -l | grep -q "^${REF}$"; then
+          # Check if the tag commit exists in main branch commits
+          TAG_COMMIT=$(git rev-list -n 1 "$REF")
+          if echo "$MAIN_COMMITS" | grep -q "$TAG_COMMIT"; then
+            IS_VALID_REF="true"
+          else
+            echo "Ref $REF is not on the $MAIN_BRANCH branch."
+          fi
+        else
+          echo "Ref $REF is neither $MAIN_BRANCH nor a valid tag."
+        fi
 
-              const tagCommitSha = tags.data[0].object.sha;
-              is_valid_ref = commitsOnMain.data.some(commit => commit.sha === tagCommitSha);
+        echo "IS_VALID_REF=$IS_VALID_REF"
+        echo "::set-output name=is_valid_ref::$IS_VALID_REF"
+      shell: bash
 
-              if (is_valid_ref) {
-                ref_type = 'tag';
-              }
-            }
-          }
-
-          core.setOutput('is_valid_ref', is_valid_ref);
-          core.setOutput('ref_type', ref_type);
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   check-codeowners:
     runs-on: ubuntu-latest
