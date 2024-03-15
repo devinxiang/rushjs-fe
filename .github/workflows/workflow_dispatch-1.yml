@@ -11,12 +11,12 @@ on:
       env:
         description: "Choose the environment for deployment."
         required: true
-        default: "testnet"
+        default: "mainnet"
         type: string
       ref:
         description: "Specify the branch or a tag to deploy"
         required: true
-        default: "main"
+        default: "v0.0.11"
         type: string
 jobs:
   pre-check:
@@ -34,26 +34,37 @@ jobs:
       with:
         path: .github/CODEOWNERS
     - name: Check if tag exists on main branch (Optimized and Error Handling)
-      id: check_ref
       run: |
+        set -eo pipefail
         REF="${{ github.event.inputs.ref }}"
         MAIN_BRANCH="main"
         IS_VALID_REF="false"
         ERROR_MESSAGE=""
 
         # Ensure tags are fetched
-        git fetch --tags
+        if ! git fetch --tags; then
+          echo "::error::Failed to fetch tags."
+          exit 1
+        fi
 
         if [ "$REF" == "$MAIN_BRANCH" ]; then
           IS_VALID_REF="true"
         elif git tag -l | grep -q "^${REF}$"; then
-          TAG_SHA=$(git rev-parse "$REF")
-          MAIN_SHA=$(git rev-parse "$MAIN_BRANCH")
-          COMMON_SHA=$(git merge-base "$TAG_SHA" "$MAIN_SHA")
-          if [ "$TAG_SHA" == "$COMMON_SHA" ]; then
-            IS_VALID_REF="true"
+          if TAG_SHA=$(git rev-parse "$REF"); then
+            if MAIN_SHA=$(git rev-parse "$MAIN_BRANCH"); then
+              COMMON_SHA=$(git merge-base "$TAG_SHA" "$MAIN_SHA")
+              if [ "$TAG_SHA" == "$COMMON_SHA" ]; then
+                IS_VALID_REF="true"
+              else
+                ERROR_MESSAGE="Tag $REF does not exist on the $MAIN_BRANCH branch."
+              fi
+            else
+              echo "::error::Failed to get SHA for main branch."
+              exit 1
+            fi
           else
-            ERROR_MESSAGE="Tag $REF does not exist on the $MAIN_BRANCH branch."
+            echo "::error::Failed to get SHA for tag $REF."
+            exit 1
           fi
         else
           ERROR_MESSAGE="Ref $REF is neither $MAIN_BRANCH nor a valid tag."
