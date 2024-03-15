@@ -43,26 +43,23 @@ jobs:
         IS_VALID_REF="invalid" # Default to invalid
         ERROR_MESSAGE=""
 
-        # Ensure all tags are fetched
-        git fetch --tags
-
         # Check if REF is exactly the main branch
         if [ "$REF" == "$MAIN_BRANCH" ]; then
-        IS_VALID_REF="valid"
+          IS_VALID_REF="valid"
         else
-          # Check if REF is a tag and if it exists
-          # if git show-ref --tags "$REF" >/dev/null 2>&1; then
-          #   # Verify if the tag is on the main branch
-          #   TAG_SHA=$(git rev-parse "$REF")
-          #   MAIN_SHA=$(git merge-base "$TAG_SHA" "$MAIN_BRANCH")
-          #   if [ "$TAG_SHA" == "$MAIN_SHA" ]; then
-          #   IS_VALID_REF="valid"
-          #   else
-          #     ERROR_MESSAGE="Tag $REF is not on the $MAIN_BRANCH branch."
-          #   fi
-          # else
-          #   ERROR_MESSAGE="Ref $REF is neither $MAIN_BRANCH nor a valid tag."
-          # fi
+          Check if REF is a tag and if it exists
+          if git show-ref --tags "$REF" >/dev/null 2>&1; then
+            # Verify if the tag is on the main branch
+            TAG_SHA=$(git rev-parse "$REF")
+            MAIN_SHA=$(git merge-base "$TAG_SHA" "$MAIN_BRANCH")
+            if [ "$TAG_SHA" == "$MAIN_SHA" ]; then
+              IS_VALID_REF="valid"
+            else
+              ERROR_MESSAGE="Tag $REF is not on the $MAIN_BRANCH branch."
+            fi
+          else
+            ERROR_MESSAGE="Ref $REF is neither $MAIN_BRANCH nor a valid tag."
+          fi
         fi
         echo "$ERROR_MESSAGE"
         echo "IS_VALID_REF=$IS_VALID_REF"
