@@ -65,6 +65,7 @@ jobs:
           fi
         fi
         echo "$ERROR_MESSAGE"
+        echo "IS_VALID_REF=$IS_VALID_REF"
         echo "is_valid_ref=$IS_VALID_REF" >> $GITHUB_OUTPUT
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
