@@ -24,82 +24,53 @@ jobs:
     if: ((github.event.inputs.project == 'web-ui') && ((github.event.inputs.env == 'testnet') || (github.event.inputs.env == 'mainnet')))
     outputs:
       codeowners: ${{ steps.codeowners.outputs.content }}
-      is_valid_ref: ${{ steps.check_ref.outputs.is_valid_ref }}
+      is_valid_ref: ${{ steps.check_ref.outputs.result }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
     - name: Read codeowners
       id: codeowners
       uses: juliangruber/read-file-action@v1
       with:
         path: .github/CODEOWNERS
-    - name: Check if tag exists on main branch (Optimized and Error Handling)
+
+    - name: Verify if ref is the main branch or a valid tag on main
+      id: check_ref
       run: |
         REF="${{ github.event.inputs.ref }}"
         MAIN_BRANCH="main"
-        IS_VALID_REF="false"
+        RESULT="invalid" # Default to invalid
         ERROR_MESSAGE=""
 
-        # Ensure tags are fetched
-        if ! git fetch --tags; then
-          echo "::error::Failed to fetch tags."
+        # Ensure all tags are fetched
+        git fetch --tags
+
+        # Check if REF is exactly the main branch
+        if [ "$REF" == "$MAIN_BRANCH" ]; then
+          RESULT="valid"
+        else
+          # Check if REF is a tag and if it exists
+          if git show-ref --tags "$REF" >/dev/null 2>&1; then
+            # Verify if the tag is on the main branch
+            TAG_SHA=$(git rev-parse "$REF^{tag}")
+            MAIN_SHA=$(git merge-base "$TAG_SHA" "$MAIN_BRANCH")
+            if [ "$TAG_SHA" == "$MAIN_SHA" ]; then
+              RESULT="valid"
+            else
+              ERROR_MESSAGE="Tag $REF is not on the $MAIN_BRANCH branch."
+            fi
+          else
+            ERROR_MESSAGE="Ref $REF is neither $MAIN_BRANCH nor a valid tag."
+          fi
+        fi
+
+        if [ "$RESULT" != "valid" ]; then
+          echo "$ERROR_MESSAGE"
           exit 1
         fi
 
-        if [ "$REF" == "$MAIN_BRANCH" ]; then
-          IS_VALID_REF="true"
-        elif git tag -l | grep -q "^${REF}$"; then
-          if TAG_SHA=$(git rev-parse "$REF"); then
-            if MAIN_SHA=$(git rev-parse "$MAIN_BRANCH"); then
-              COMMON_SHA=$(git merge-base "$TAG_SHA" "$MAIN_SHA")
-              if [ "$TAG_SHA" == "$COMMON_SHA" ]; then
-                IS_VALID_REF="true"
-              else
-                ERROR_MESSAGE="Tag $REF does not exist on the $MAIN_BRANCH branch."
-              fi
-            else
-              echo "::error::Failed to get SHA for main branch."
-              exit 1
-            fi
-          else
-            echo "::error::Failed to get SHA for tag $REF."
-            exit 1
-          fi
-        else
-          ERROR_MESSAGE="Ref $REF is neither $MAIN_BRANCH nor a valid tag."
-        fi
-
-        echo "IS_VALID_REF=$IS_VALID_REF"
-        echo "ERROR_MESSAGE=$ERROR_MESSAGE"
-        echo "::set-output name=is_valid_ref::$IS_VALID_REF"
-        echo "::set-output name=error_message::$ERROR_MESSAGE
-      shell: bash
+        echo "RESULT=$RESULT"
+        echo "::set-output name=result::$RESULT"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  check-codeowners:
-    runs-on: ubuntu-latest
-    needs: [pre-check]
-    if: (!contains(needs.pre-check.outputs.codeowners, github.event.comment.user.login))
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Create Version Comment
-      uses: peter-evans/create-or-update-comment@v2
-      with:
-        issue-number: ${{ github.event.issue.number }}
-        comment-id: ${{ github.event.comment.id }}
-        body: |
-          ++++++
-          Deployment request denied. Please ensure you have the necessary permissions by contacting the project code owners.
-        reactions: rocket
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  web-ui-prod-deploy:
-    runs-on: ubuntu-latest
-    needs: [pre-check]
-    if: ((needs.pre-check.outputs.is_valid_ref == 'valid') && (inputs.project == 'web-ui') && (inputs.env == 'mainnet'))
-    name: Mock Deploy
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
