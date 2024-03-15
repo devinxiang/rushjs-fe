@@ -40,7 +40,7 @@ jobs:
       run: |
         REF="${{ github.event.inputs.ref }}"
         MAIN_BRANCH="main"
-        RESULT="invalid" # Default to invalid
+        IS_VALID_REF="invalid" # Default to invalid
         ERROR_MESSAGE=""
 
         # Ensure all tags are fetched
@@ -48,7 +48,7 @@ jobs:
 
         # Check if REF is exactly the main branch
         if [ "$REF" == "$MAIN_BRANCH" ]; then
-          RESULT="valid"
+        IS_VALID_REF="valid"
         else
           # Check if REF is a tag and if it exists
           if git show-ref --tags "$REF" >/dev/null 2>&1; then
@@ -56,7 +56,7 @@ jobs:
             TAG_SHA=$(git rev-parse "$REF")
             MAIN_SHA=$(git merge-base "$TAG_SHA" "$MAIN_BRANCH")
             if [ "$TAG_SHA" == "$MAIN_SHA" ]; then
-              RESULT="valid"
+            IS_VALID_REF="valid"
             else
               ERROR_MESSAGE="Tag $REF is not on the $MAIN_BRANCH branch."
             fi
@@ -64,13 +64,7 @@ jobs:
             ERROR_MESSAGE="Ref $REF is neither $MAIN_BRANCH nor a valid tag."
           fi
         fi
-
-        if [ "$RESULT" != "valid" ]; then
-          echo "$ERROR_MESSAGE"
-          exit 1
-        fi
-
-        echo "RESULT=$RESULT"
-        echo "::set-output name=result::$RESULT"
+        echo "$ERROR_MESSAGE"
+        echo "is_valid_ref=$IS_VALID_REF" >> $GITHUB_OUTPUT
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
