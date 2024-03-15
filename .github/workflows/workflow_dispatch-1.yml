@@ -73,7 +73,8 @@ jobs:
         echo "IS_VALID_REF=$IS_VALID_REF"
         echo "ERROR_MESSAGE=$ERROR_MESSAGE"
         echo "::set-output name=is_valid_ref::$IS_VALID_REF"
-        echo "::set-output name=error_message::$ERROR_MESSAGE"
+        echo "::set-output name=error_message::$ERROR_MESSAGE
+      shell: bash
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
