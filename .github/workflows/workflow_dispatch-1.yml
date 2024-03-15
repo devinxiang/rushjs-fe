@@ -47,7 +47,7 @@ jobs:
         if [ "$REF" == "$MAIN_BRANCH" ]; then
           IS_VALID_REF="valid"
         else
-          Check if REF is a tag and if it exists
+          # Check if REF is a tag and if it exists
           if git show-ref --tags "$REF" >/dev/null 2>&1; then
             # Verify if the tag is on the main branch
             TAG_SHA=$(git rev-parse "$REF")
