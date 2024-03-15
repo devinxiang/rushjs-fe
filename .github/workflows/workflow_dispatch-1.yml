@@ -33,36 +33,41 @@ jobs:
       uses: juliangruber/read-file-action@v1
       with:
         path: .github/CODEOWNERS
-    - name: Check ref validity
+    - name: Check if tag exists on main branch (Optimized and Error Handling)
       id: check_ref
       run: |
+        set -eo pipefail
+        trap 'echo "::error::An error occurred." ; exit 1' ERR
+
         REF="${{ github.event.inputs.ref }}"
         MAIN_BRANCH="main"
         IS_VALID_REF="false"
         ERROR_MESSAGE=""
 
-        # Fetch tags and main branch commits in advance
+        # Ensure tags are fetched
         git fetch --tags
-        MAIN_COMMITS=$(git rev-list "$MAIN_BRANCH")
 
         if [ "$REF" == "$MAIN_BRANCH" ]; then
           IS_VALID_REF="true"
         elif git tag -l | grep -q "^${REF}$"; then
-          # Check if the tag commit exists in main branch commits
-          TAG_COMMIT=$(git rev-list -n 1 "$REF")
-          if echo "$MAIN_COMMITS" | grep -q "$TAG_COMMIT"; then
+          TAG_SHA=$(git rev-parse "$REF")
+          MAIN_SHA=$(git rev-parse "$MAIN_BRANCH")
+          COMMON_SHA=$(git merge-base "$TAG_SHA" "$MAIN_SHA")
+          if [ "$TAG_SHA" == "$COMMON_SHA" ]; then
             IS_VALID_REF="true"
           else
-            echo "Ref $REF is not on the $MAIN_BRANCH branch."
+            ERROR_MESSAGE="Tag $REF does not exist on the $MAIN_BRANCH branch."
           fi
         else
-          echo "Ref $REF is neither $MAIN_BRANCH nor a valid tag."
+          ERROR_MESSAGE="Ref $REF is neither $MAIN_BRANCH nor a valid tag."
         fi
 
         echo "IS_VALID_REF=$IS_VALID_REF"
+        echo "ERROR_MESSAGE=$ERROR_MESSAGE"
         echo "::set-output name=is_valid_ref::$IS_VALID_REF"
-      shell: bash
-
+        echo "::set-output name=error_message::$ERROR_MESSAGE"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   check-codeowners:
     runs-on: ubuntu-latest
