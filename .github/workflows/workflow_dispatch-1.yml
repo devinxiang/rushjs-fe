@@ -48,7 +48,7 @@ jobs:
           IS_VALID_REF="valid"
         else
           # Check if REF is a tag and if it exists
-          if git show-ref --tags "$REF" >/dev/null 2>&1; then
+          if git rev-parse "refs/tags/$REF" >/dev/null 2>&1; then
             # Verify if the tag is on the main branch
             TAG_SHA=$(git rev-parse "$REF")
             MAIN_SHA=$(git merge-base "$TAG_SHA" "$MAIN_BRANCH")
