@@ -28,6 +28,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.inputs.ref }}
+        fetch-depth: 0
 
     - name: Read codeowners
       id: codeowners
@@ -43,7 +46,6 @@ jobs:
         IS_VALID_REF="invalid" # Default to invalid
         ERROR_MESSAGE=""
 
-        git fetch --tags
         # Check if REF is exactly the main branch
         if [ "$REF" == "$MAIN_BRANCH" ]; then
           IS_VALID_REF="valid"
