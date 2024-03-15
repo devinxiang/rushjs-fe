@@ -36,9 +36,6 @@ jobs:
     - name: Check if tag exists on main branch (Optimized and Error Handling)
       id: check_ref
       run: |
-        set -eo pipefail
-        trap 'echo "::error::An error occurred." ; exit 1' ERR
-
         REF="${{ github.event.inputs.ref }}"
         MAIN_BRANCH="main"
         IS_VALID_REF="false"
