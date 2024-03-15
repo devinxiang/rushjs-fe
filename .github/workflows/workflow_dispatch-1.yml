@@ -1,0 +1,86 @@
+name: workflow_dispatch deploy the 'main' branch or a tag scheduler
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "Release the project manually."
+        required: true
+        default: "web-ui"
+        type: string
+      env:
+        description: "Choose the environment for deployment."
+        required: true
+        default: "testnet"
+        type: string
+      ref:
+        description: "Specify the branch or a tag to deploy"
+        required: true
+        default: "main"
+        type: string
+jobs:
+  pre-check:
+    runs-on: ubuntu-latest
+    if: ((github.event.inputs.project == 'web-ui') && ((github.event.inputs.env == 'testnet') || (github.event.inputs.env == 'mainnet')))
+    outputs:
+      codeowners: ${{ steps.codeowners.outputs.content }}
+      is_valid_ref: ${{ steps.check_ref.outputs.is_valid_ref }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Read codeowners
+      id: codeowners
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: .github/CODEOWNERS
+    - name: Check ref validity
+      id: check_ref
+      run: |
+        REF="${{ github.event.inputs.ref }}"
+        # Check if REF is the main branch
+        if [ "$REF" = "main" ]; then
+          echo "REF is the main branch."
+          echo "::set-output name=is_valid_ref::true"
+        # Check if REF is a tag
+        elif git rev-parse "$REF^{tag}" >/dev/null 2>&1; then
+          # Check if the tag is on the main branch
+          TAG_COMMIT=$(git rev-list -n 1 "$REF")
+          MAIN_COMMIT=$(git merge-base "$TAG_COMMIT" main)
+          if [ "$TAG_COMMIT" = "$MAIN_COMMIT" ]; then
+            echo "REF is a valid tag on the main branch."
+            echo "::set-output name=is_valid_ref::true"
+          else
+            echo "REF is a tag but not on the main branch."
+            echo "::set-output name=is_valid_ref::false"
+          fi
+        else
+          echo "REF is neither the main branch nor a valid tag on the main branch."
+          echo "::set-output name=is_valid_ref::false"
+        fi
+      shell: bash
+
+  check-codeowners:
+    runs-on: ubuntu-latest
+    needs: [pre-check]
+    if: (!contains(needs.pre-check.outputs.codeowners, github.event.comment.user.login))
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Create Version Comment
+      uses: peter-evans/create-or-update-comment@v2
+      with:
+        issue-number: ${{ github.event.issue.number }}
+        comment-id: ${{ github.event.comment.id }}
+        body: |
+          ++++++
+          Deployment request denied. Please ensure you have the necessary permissions by contacting the project code owners.
+        reactions: rocket
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  web-ui-prod-deploy:
+    needs: [pre-check]
+    if: (needs.pre-check.outputs.is_valid_ref && (inputs.project == 'web-ui') && (inputs.env == 'mainnet'))
+    name: Mock Deploy
+    uses: actions/checkout@v5
+    with:
+      fetch-depth: 0
