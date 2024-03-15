@@ -40,7 +40,7 @@ jobs:
         # Check if REF is the main branch
         if [ "$REF" = "main" ]; then
           echo "REF is the main branch."
-          echo "::set-output name=is_valid_ref::true"
+          echo "is_valid_ref=true" >> $GITHUB_OUTPUT
         # Check if REF is a tag
         elif git rev-parse "$REF^{tag}" >/dev/null 2>&1; then
           # Check if the tag is on the main branch
@@ -48,14 +48,14 @@ jobs:
           MAIN_COMMIT=$(git merge-base "$TAG_COMMIT" main)
           if [ "$TAG_COMMIT" = "$MAIN_COMMIT" ]; then
             echo "REF is a valid tag on the main branch."
-            echo "::set-output name=is_valid_ref::true"
+            echo "is_valid_ref=true" >> $GITHUB_OUTPUT
           else
             echo "REF is a tag but not on the main branch."
-            echo "::set-output name=is_valid_ref::false"
+            echo "is_valid_ref=false" >> $GITHUB_OUTPUT
           fi
         else
           echo "REF is neither the main branch nor a valid tag on the main branch."
-          echo "::set-output name=is_valid_ref::false"
+          echo "is_valid_ref=false" >> $GITHUB_OUTPUT
         fi
       shell: bash
 
