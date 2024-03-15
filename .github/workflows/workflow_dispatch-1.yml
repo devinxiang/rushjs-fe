@@ -40,7 +40,7 @@ jobs:
         # Check if REF is the main branch
         if [ "$REF" = "main" ]; then
           echo "REF is the main branch."
-          echo "is_valid_ref=true" >> $GITHUB_OUTPUT
+          echo "is_valid_ref=valid" >> $GITHUB_OUTPUT
         # Check if REF is a tag
         elif git rev-parse "$REF^{tag}" >/dev/null 2>&1; then
           # Check if the tag is on the main branch
@@ -48,14 +48,14 @@ jobs:
           MAIN_COMMIT=$(git merge-base "$TAG_COMMIT" main)
           if [ "$TAG_COMMIT" = "$MAIN_COMMIT" ]; then
             echo "REF is a valid tag on the main branch."
-            echo "is_valid_ref=true" >> $GITHUB_OUTPUT
+            echo "is_valid_ref=valid" >> $GITHUB_OUTPUT
           else
             echo "REF is a tag but not on the main branch."
-            echo "is_valid_ref=false" >> $GITHUB_OUTPUT
+            echo "is_valid_ref=invalid" >> $GITHUB_OUTPUT
           fi
         else
           echo "REF is neither the main branch nor a valid tag on the main branch."
-          echo "is_valid_ref=false" >> $GITHUB_OUTPUT
+          echo "is_valid_ref=invalid" >> $GITHUB_OUTPUT
         fi
       shell: bash
 
@@ -80,7 +80,7 @@ jobs:
   web-ui-prod-deploy:
     runs-on: ubuntu-latest
     needs: [pre-check]
-    if: (needs.pre-check.outputs.is_valid_ref && (inputs.project == 'web-ui') && (inputs.env == 'mainnet'))
+    if: ((needs.pre-check.outputs.is_valid_ref == 'valid') && (inputs.project == 'web-ui') && (inputs.env == 'mainnet'))
     name: Mock Deploy
     steps:
     - name: Checkout repository
