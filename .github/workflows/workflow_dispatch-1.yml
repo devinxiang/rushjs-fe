@@ -18,6 +18,22 @@ on:
         required: true
         default: "v0.0.11"
         type: string
+      input-choice:
+        description: "Choose the input"
+        required: true
+        default: "option1"
+        options: ['option1', 'option2', 'option3', 'option4']
+        type: choice
+      input-string:
+        description: "Choose the input"
+        required: true
+        default: "option1"
+        type: string
+      input-boolean:
+        description: "Choose the input"
+        required: true
+        default: true
+        type: boolean
 jobs:
   pre-check:
     runs-on: ubuntu-latest
