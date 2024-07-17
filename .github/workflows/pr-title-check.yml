@@ -1,0 +1,25 @@
+# This workflow checks that the title of PRs (thus commit message) are formatted correctly.
+
+name: PR Title Check
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  pull-request-title-check:
+    runs-on: [ubuntu-latest]
+    permissions:
+      contents: read
+      pull-requests: read
+    # if: ${{ github.event.pull_request.base.ref == 'master' }}
+    steps:
+      - name: Checkout repo with config file
+        uses: actions/checkout@v4
+      - uses: thehanimo/pr-title-checker@v1.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          configuration_path: ".github/pull-request-title-check.json"
