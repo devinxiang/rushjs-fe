@@ -17,6 +17,11 @@ jobs:
       pull-requests: read
     # if: ${{ github.event.pull_request.base.ref == 'master' }}
     steps:
+      - name: Checkout repo with config file
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
       - uses: thehanimo/pr-title-checker@v1.4.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
